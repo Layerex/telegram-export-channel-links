@@ -5,6 +5,7 @@ __version__ = "0.0.1"
 __desc__ = "Export public channel and group links of telegram account."
 
 import argparse
+import sys
 
 from telethon.sync import TelegramClient
 from telethon.utils import get_display_name
@@ -42,9 +43,19 @@ def main():
         action="store_true",
         help="Export channel names",
     )
+    parser.add_argument(
+        "file",
+        metavar="FILE",
+        type=str,
+        nargs="?",
+        help="File to export to (data is printed to stdout by default)",
+    )
     args = parser.parse_args()
 
     with TelegramClient(__prog__, args.app_id, args.app_hash) as client:
+
+        if args.file:
+            sys.stdout = open(args.file, "w")
 
         def write_dialog(dialog):
             try:
