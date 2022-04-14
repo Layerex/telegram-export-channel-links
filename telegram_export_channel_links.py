@@ -7,6 +7,7 @@ __desc__ = "Export public channel and group links of telegram account."
 import argparse
 
 from telethon.sync import TelegramClient
+from telethon.utils import get_display_name
 
 
 def main():
@@ -36,16 +37,22 @@ def main():
         action="store_true",
         help="Don't export channel links",
     )
+    parser.add_argument(
+        "--names",
+        action="store_true",
+        help="Export channel names",
+    )
     args = parser.parse_args()
 
     with TelegramClient(__prog__, args.app_id, args.app_hash) as client:
+
         def write_dialog(dialog):
             try:
-                username = client.get_entity(dialog.id).username
-                if username:
-                    print(
-                        "https://t.me/", client.get_entity(dialog.id).username, sep=""
-                    )
+                entity = client.get_entity(dialog.id)
+                if entity.username:
+                    if args.names:
+                        print(get_display_name(entity))
+                    print("https://t.me/", entity.username, sep="")
             except AttributeError:
                 pass
 
