@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 __prog__ = "telegram-export-channel-links"
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 __desc__ = "Export public channel and group links of telegram account."
 
 import argparse
