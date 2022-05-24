@@ -5,6 +5,7 @@ __version__ = "0.0.2"
 __desc__ = "Export public channel and group links of telegram account."
 
 import argparse
+import os
 import sys
 
 from telethon.sync import TelegramClient
@@ -52,7 +53,17 @@ def main():
     )
     args = parser.parse_args()
 
-    with TelegramClient(__prog__, args.app_id, args.app_hash) as client:
+    try:
+        import standardpaths
+
+        standardpaths.configure(application_name=__prog__)
+        data_dir = standardpaths.get_writable_path("data")
+        os.makedirs(data_dir, exist_ok=True)
+        session_file = os.path.join(data_dir, f"{__prog__}.session")
+    except ImportError:
+        session_file = None
+
+    with TelegramClient(session_file or __prog__, args.app_id, args.app_hash) as client:
 
         if args.file:
             sys.stdout = open(args.file, "w")

@@ -30,5 +30,5 @@ setuptools.setup(
             "telegram-export-channel-links = telegram_export_channel_links:main",
         ],
     },
-    install_requires=["telethon"],
+    install_requires=["telethon", "pystandardpaths"],
 )
